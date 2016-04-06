@@ -41,7 +41,8 @@ public class Configuration {
 
     private int pollingDuration = 20;
 
-    private int heartbeatTimeout = 60;
+    private int heartbeatTimeout = 80;
+    private int heartbeatResponseTimeout = 60;
     private int heartbeatInterval = 25;
     private int closeTimeout = 60;
     private int firstDataTimeout = 5;
@@ -224,6 +225,23 @@ public class Configuration {
     }
     public boolean isHeartbeatsEnabled() {
         return heartbeatTimeout > 0;
+    }
+
+    public int getHeartbeatResponseTimeout() {
+        return heartbeatResponseTimeout;
+    }
+
+    /**
+     * Heartbeat response wait timeout.
+     * <p/>
+     * The server sends heartbeat every {@link #heartbeatInterval} seconds.<br/>
+     * The client should respond in {@link #heartbeatResponseTimeout} seconds.<br/>
+     * If the client does not receives heartbeat from server for {@link #heartbeatTimeout} seconds it should terminate the connection.
+     *
+     * @param heartbeatResponseTimeout timeout in seconds.
+     */
+    public void setHeartbeatResponseTimeout(int heartbeatResponseTimeout) {
+        this.heartbeatResponseTimeout = heartbeatResponseTimeout;
     }
 
     /**
