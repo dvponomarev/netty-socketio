@@ -15,6 +15,7 @@
  */
 package com.corundumstudio.socketio.transport;
 
+import com.corundumstudio.socketio.log.LogUtil;
 import io.netty.channel.Channel;
 import io.netty.util.concurrent.Future;
 
@@ -47,11 +48,17 @@ public class WebSocketClient extends MainBaseClient {
                 @Override
                 public void run() {
                     getChannel()
-                    .writeAndFlush(new WebSocketPacketMessage(getSessionId(), packet));
+                    .writeAndFlush(new WebSocketPacketMessage(
+                            getSessionId(), LogUtil.getValue(WebSocketClient.this), packet));
                 }
             });
         }
-        return getChannel().writeAndFlush(new WebSocketPacketMessage(getSessionId(), packet));
+        return getChannel().writeAndFlush(new WebSocketPacketMessage(
+                getSessionId(), LogUtil.getValue(WebSocketClient.this), packet));
+    }
+
+    public String getHandshakeParamToLog() {
+        return config.getHandshakeParamToLog();
     }
 
 }

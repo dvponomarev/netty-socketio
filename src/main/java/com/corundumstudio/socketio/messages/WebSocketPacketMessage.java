@@ -22,11 +22,13 @@ import com.corundumstudio.socketio.parser.Packet;
 public class WebSocketPacketMessage extends BaseMessage {
 
     private final UUID sessionId;
+    private final String handshakeParamToLogValue;
     private final Packet packet;
 
-    public WebSocketPacketMessage(UUID sessionId, Packet packet) {
+    public WebSocketPacketMessage(UUID sessionId, String handshakeParamToLogValue, Packet packet) {
         super();
         this.sessionId = sessionId;
+        this.handshakeParamToLogValue = handshakeParamToLogValue;
         this.packet = packet;
     }
 
@@ -36,6 +38,10 @@ public class WebSocketPacketMessage extends BaseMessage {
 
     public UUID getSessionId() {
         return sessionId;
+    }
+
+    public String getHandshakeParamToLogValue() {
+        return handshakeParamToLogValue;
     }
 
 }

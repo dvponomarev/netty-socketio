@@ -16,6 +16,8 @@
 package com.corundumstudio.socketio.handler;
 
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
+
+import com.corundumstudio.socketio.log.LogUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -136,13 +138,13 @@ public class AuthorizeHandler extends ChannelInboundHandlerAdapter implements Di
         try {
             result = configuration.getAuthorizationListener().isAuthorized(data);
         } catch (Exception e) {
-            log.error("Authorization error", e);
+            log.error(String.format("Authorization error, p%sp", LogUtil.getValue(data, configuration)), e);
         }
 
         if (result) {
             UUID sessionId = UUID.randomUUID();
 
-            scheduleDisconnect(channel, sessionId);
+            scheduleDisconnect(channel, sessionId, LogUtil.getValue(data, configuration));
 
             String msg = createHandshake(sessionId);
 
@@ -154,13 +156,14 @@ public class AuthorizeHandler extends ChannelInboundHandlerAdapter implements Di
             channel.writeAndFlush(new AuthorizeMessage(msg, jsonpParam, origin, sessionId));
 
             authorizedSessionIds.put(sessionId, data);
-            log.debug("Handshake authorized for sessionId: {} query params: {} headers: {}", sessionId, params, headers);
+            log.debug("Handshake authorized for session: p{}p {} query params: {} headers: {}",
+                      LogUtil.getValue(data, configuration), sessionId, params, headers);
         } else {
             HttpResponse res = new DefaultHttpResponse(HTTP_1_1, HttpResponseStatus.UNAUTHORIZED);
             ChannelFuture f = channel.writeAndFlush(res);
             f.addListener(ChannelFutureListener.CLOSE);
 
-            log.debug("Handshake unauthorized, query params: {} headers: {}", params, headers);
+            log.debug("Handshake unauthorized, query params: {} headers: {} p{}p", params, headers, LogUtil.getValue(data, configuration));
         }
     }
 
@@ -173,7 +176,7 @@ public class AuthorizeHandler extends ChannelInboundHandlerAdapter implements Di
         return msg;
     }
 
-    private void scheduleDisconnect(Channel channel, final UUID sessionId) {
+    private void scheduleDisconnect(Channel channel, final UUID sessionId, final String logValue) {
         channel.closeFuture().addListener(new ChannelFutureListener() {
             @Override
             public void operationComplete(ChannelFuture future) throws Exception {
@@ -182,7 +185,7 @@ public class AuthorizeHandler extends ChannelInboundHandlerAdapter implements Di
                     @Override
                     public void run() {
                         authorizedSessionIds.remove(sessionId);
-                        log.debug("Authorized sessionId: {} removed due to connection timeout", sessionId);
+                        log.debug("Authorized session: p{}p {} removed due to connection timeout", logValue, sessionId);
                     }
                 }, configuration.getCloseTimeout(), TimeUnit.SECONDS);
             }

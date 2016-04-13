@@ -15,6 +15,8 @@
  */
 package com.corundumstudio.socketio.handler;
 
+import com.corundumstudio.socketio.log.LogUtil;
+import com.corundumstudio.socketio.transport.WebSocketClient;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.ChannelHandler.Sharable;
@@ -59,7 +61,8 @@ public class PacketHandler extends SimpleChannelInboundHandler<PacketsMessage> {
         MainBaseClient client = message.getClient();
 
         if (log.isTraceEnabled()) {
-            log.trace("In message: {} sessionId: {}", content.toString(CharsetUtil.UTF_8), client.getSessionId());
+            log.trace("In message: {} session:p{}p {}", content.toString(CharsetUtil.UTF_8),
+                      (client instanceof WebSocketClient) ? LogUtil.getValue(((WebSocketClient) client)) : null, client.getSessionId());
         }
         while (content.isReadable()) {
             try {

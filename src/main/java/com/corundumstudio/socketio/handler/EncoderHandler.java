@@ -182,8 +182,9 @@ public class EncoderHandler extends ChannelOutboundHandlerAdapter {
     private void handle(WebSocketPacketMessage webSocketPacketMessage, Channel channel, ByteBuf out) throws IOException {
         encoder.encodePacket(webSocketPacketMessage.getPacket(), out);
         WebSocketFrame res = new TextWebSocketFrame(out);
-        log.trace("Out message: {} sessionId: {}",
-                        out.toString(CharsetUtil.UTF_8), webSocketPacketMessage.getSessionId());
+        log.trace("Out message: {} session:p{}p {}",
+                  out.toString(CharsetUtil.UTF_8), webSocketPacketMessage.getHandshakeParamToLogValue(),
+                  webSocketPacketMessage.getSessionId());
 
         if (out.isReadable()) {
             channel.writeAndFlush(res);

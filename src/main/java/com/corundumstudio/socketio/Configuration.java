@@ -79,6 +79,8 @@ public class Configuration {
 
     private AckMode ackMode = AckMode.AUTO_SUCCESS_ONLY;
 
+    private String handshakeParamToLog;
+
     public Configuration() {
     }
 
@@ -127,6 +129,8 @@ public class Configuration {
         setCrossDomainPolicy(conf.getCrossDomainPolicy());
         setUseStrictOrdering(conf.isUseStrictOrdering());
         setFirstDataTimeout(conf.getFirstDataTimeout());
+
+        setHandshakeParamToLog(conf.getHandshakeParamToLog());
     }
 
     private String join(Transport[] transports) {
@@ -553,6 +557,19 @@ public class Configuration {
     }
     public int getFirstDataTimeout() {
         return firstDataTimeout;
+    }
+
+    /**
+     * Set handshake param name to add in log on send/receive packet.<br/>
+     * Supported only in websocket transport.
+     *
+     * @param handshakeParamToLog handshake url param name.
+     */
+    public void setHandshakeParamToLog(String handshakeParamToLog) {
+        this.handshakeParamToLog = handshakeParamToLog;
+    }
+    public String getHandshakeParamToLog() {
+        return handshakeParamToLog;
     }
 
 }
