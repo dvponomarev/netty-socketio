@@ -142,4 +142,6 @@ public abstract class MainBaseClient {
         return store;
     }
 
+    public abstract String getHandshakeParamToLog();
+
 }

@@ -560,8 +560,7 @@ public class Configuration {
     }
 
     /**
-     * Set handshake param name to add in log on send/receive packet.<br/>
-     * Supported only in websocket transport.
+     * Set handshake param name to add in log on send/receive packet.
      *
      * @param handshakeParamToLog handshake url param name.
      */

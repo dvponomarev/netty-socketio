@@ -18,20 +18,11 @@ package com.corundumstudio.socketio.log;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.HandshakeData;
 import com.corundumstudio.socketio.transport.MainBaseClient;
-import com.corundumstudio.socketio.transport.WebSocketClient;
 
 public class LogUtil {
 
-    public static String getValue(WebSocketClient client) {
+    public static String getValue(MainBaseClient client) {
         return getValue(client.getHandshakeData(), client.getHandshakeParamToLog());
-    }
-
-    public static String getValue(MainBaseClient client, String param) {
-        return getValue(client.getHandshakeData(), param);
-    }
-
-    public static String getValue(MainBaseClient client, Configuration configuration) {
-        return getValue(client.getHandshakeData(), configuration.getHandshakeParamToLog());
     }
 
     public static String getValue(HandshakeData data, Configuration configuration) {

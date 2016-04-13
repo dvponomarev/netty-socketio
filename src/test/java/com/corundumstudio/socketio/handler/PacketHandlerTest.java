@@ -61,7 +61,7 @@ public class PacketHandlerTest {
     private NamespacesHub namespacesHub = new NamespacesHub(cfg);
     @Mocked
     private Channel channel;
-    private MainBaseClient client = new XHRPollingClient(null, null, UUID.randomUUID(), null, new MemoryStoreFactory(), null);
+    private MainBaseClient client = new XHRPollingClient(null, null, UUID.randomUUID(), null, new MemoryStoreFactory(), null, cfg);
     private final AtomicInteger invocations = new AtomicInteger();
 
     @Before

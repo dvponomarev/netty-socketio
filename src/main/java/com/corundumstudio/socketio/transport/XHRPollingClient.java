@@ -15,6 +15,7 @@
  */
 package com.corundumstudio.socketio.transport;
 
+import com.corundumstudio.socketio.Configuration;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.util.AttributeKey;
@@ -37,10 +38,12 @@ public class XHRPollingClient extends MainBaseClient {
 
     private final Queue<Packet> packetQueue = PlatformDependent.newMpscQueue();
     private String origin;
+    private final Configuration config;
 
     public XHRPollingClient(AckManager ackManager, DisconnectableHub disconnectable,
-            UUID sessionId, Transport transport, StoreFactory storeFactory, HandshakeData handshakeData) {
+            UUID sessionId, Transport transport, StoreFactory storeFactory, HandshakeData handshakeData, Configuration config) {
         super(sessionId, ackManager, disconnectable, transport, storeFactory, handshakeData);
+        this.config = config;
     }
 
     public void bindChannel(Channel channel, String origin) {
@@ -59,6 +62,11 @@ public class XHRPollingClient extends MainBaseClient {
             return getChannel().writeAndFlush(new XHRSendPacketsMessage(getSessionId(), origin, packetQueue));
         }
         return getChannel().newSucceededFuture();
+    }
+
+    @Override
+    public String getHandshakeParamToLog() {
+        return config.getHandshakeParamToLog();
     }
 
 }

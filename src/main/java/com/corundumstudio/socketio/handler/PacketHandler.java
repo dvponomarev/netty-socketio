@@ -15,18 +15,8 @@
  */
 package com.corundumstudio.socketio.handler;
 
-import com.corundumstudio.socketio.log.LogUtil;
-import com.corundumstudio.socketio.transport.WebSocketClient;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.channel.ChannelHandler.Sharable;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.util.CharsetUtil;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.corundumstudio.socketio.listener.ExceptionListener;
+import com.corundumstudio.socketio.log.LogUtil;
 import com.corundumstudio.socketio.messages.PacketsMessage;
 import com.corundumstudio.socketio.namespace.Namespace;
 import com.corundumstudio.socketio.namespace.NamespacesHub;
@@ -35,6 +25,13 @@ import com.corundumstudio.socketio.parser.Packet;
 import com.corundumstudio.socketio.parser.PacketType;
 import com.corundumstudio.socketio.transport.MainBaseClient;
 import com.corundumstudio.socketio.transport.NamespaceClient;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler.Sharable;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.util.CharsetUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Sharable
 public class PacketHandler extends SimpleChannelInboundHandler<PacketsMessage> {
@@ -62,7 +59,7 @@ public class PacketHandler extends SimpleChannelInboundHandler<PacketsMessage> {
 
         if (log.isTraceEnabled()) {
             log.trace("In message: {} session:p{}p {}", content.toString(CharsetUtil.UTF_8),
-                      (client instanceof WebSocketClient) ? LogUtil.getValue(((WebSocketClient) client)) : null, client.getSessionId());
+                      LogUtil.getValue(client), client.getSessionId());
         }
         while (content.isReadable()) {
             try {
