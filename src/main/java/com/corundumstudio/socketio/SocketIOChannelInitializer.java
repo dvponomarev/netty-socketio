@@ -15,6 +15,7 @@
  */
 package com.corundumstudio.socketio;
 
+import com.corundumstudio.socketio.log.LogUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
@@ -205,7 +206,7 @@ public class SocketIOChannelInitializer extends ChannelInitializer<Channel> impl
 
         configuration.getStoreFactory().pubSubStore().publish(PubSubStore.DISCONNECT, new DisconnectMessage(client.getSessionId()));
 
-        log.debug("Client with sessionId: {} disconnected", client.getSessionId());
+        log.debug("Client with session:p{}p {} disconnected", LogUtil.getValue(client), client.getSessionId());
     }
 
     public void stop() {

@@ -17,6 +17,7 @@ package com.corundumstudio.socketio.handler;
 
 import java.util.concurrent.TimeUnit;
 
+import com.corundumstudio.socketio.log.LogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,8 +63,9 @@ public class HeartbeatHandler implements Disconnectable {
         scheduler.cancel(key);
         scheduler.scheduleCallback(key, new Runnable() {
             public void run() {
+                final String logValue = LogUtil.getValue(client);
                 client.disconnect();
-                log.debug("Client with sessionId: {} disconnected due to heartbeat timeout", client.getSessionId());
+                log.debug("Client with session:p{}p {} disconnected due to heartbeat timeout", logValue, client.getSessionId());
             }
         }, configuration.getHeartbeatResponseTimeout(), TimeUnit.SECONDS);
     }
